@@ -15,8 +15,9 @@ public class Operations {
 
         String[] splitNumbers = numbers.split(",");
 
-        for (int i = 0; i < splitNumbers.length && i<2; i++) {
-            result += Integer.parseInt(splitNumbers[i]);
+        for (String number:
+             splitNumbers) {
+            result += Integer.parseInt(number);
         }
 
         return result;
