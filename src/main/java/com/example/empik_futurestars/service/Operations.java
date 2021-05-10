@@ -4,6 +4,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Service
@@ -13,14 +14,20 @@ public class Operations {
     public Operations() {
     }
 
-    private char getDelimiter(String numbers) {
-        return numbers.charAt(2);
+    private String getDelimiter(String numbers) {
+        Pattern delimiterPattern = Pattern.compile("(\\[.*?\\])");
+        Matcher matcher = delimiterPattern.matcher(numbers);
+        if (matcher.find()){
+            return matcher.group(1);
+        }else {
+            return String.valueOf(numbers.charAt(2));
+        }
     }
 
 
     public int Add(String numbers) {
         Pattern badNumbersPattern = Pattern.compile(",\\\\");
-        Pattern optionalDelimiterPattern = Pattern.compile("//.\\\\n");
+        Pattern optionalDelimiterPattern = Pattern.compile("//.*\\\\n");
         String[] splitNumbers;
         StringBuilder neativeNumbers = new StringBuilder();
 
@@ -29,8 +36,8 @@ public class Operations {
         } else {
 
             if (optionalDelimiterPattern.matcher(numbers).find()) {
-                char delimiter = getDelimiter(numbers);
-                splitNumbers = numbers.split("\\\\n|" + delimiter);
+                System.out.println("tutaj"+getDelimiter(numbers));
+                splitNumbers = numbers.split("\\\\n|" + getDelimiter(numbers));
             } else {
                 splitNumbers = numbers.split("\\\\n|,");
             }
