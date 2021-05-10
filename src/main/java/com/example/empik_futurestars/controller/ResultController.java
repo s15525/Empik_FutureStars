@@ -2,7 +2,6 @@ package com.example.empik_futurestars.controller;
 import com.example.empik_futurestars.repository.ResultRepository;
 import com.example.empik_futurestars.service.Operations;
 import com.example.empik_futurestars.service.Result;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -10,15 +9,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class ResultController {
     private static final String template = "%s";
-    final Operations operations;
-    AnnotationConfigApplicationContext context;
-    ResultRepository repository;
+    private final Operations operations;
+    private final ResultRepository repository;
 
-    public ResultController(Operations operations) {
-        context = new AnnotationConfigApplicationContext();
-        context.scan("com.example.empik_futurestars.repository");
-        context.refresh();
-        repository = context.getBean(ResultRepository.class);
+    public ResultController(Operations operations,ResultRepository repository) {
+        this.repository = repository;
         this.operations = operations;
     }
 
@@ -34,7 +29,6 @@ public class ResultController {
         }
         repository.store(result);
         operations.setResult(0);
-        context.close();
         return repository.retrieve(result.getResult());
     }
 
