@@ -4,8 +4,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -24,7 +22,7 @@ public class Operations {
             delimiter.append("|").append(matcher.group(1));
         }
         if (delimiter.length() == 0) {
-            return delimiter.append("|").append(String.valueOf(numbers.charAt(2))).toString();
+            return delimiter.append("|").append(numbers.charAt(2)).toString();
         }
         return delimiter.toString();
     }
@@ -33,7 +31,7 @@ public class Operations {
     public int Add(String numbers) {
         Pattern badNumbersPattern = Pattern.compile(",\\\\");
         Pattern optionalDelimiterPattern = Pattern.compile("//.*\\\\n");
-        String[] splitNumbers = new String[0];
+        String[] splitNumbers;
         StringBuilder neativeNumbers = new StringBuilder();
 
         if (badNumbersPattern.matcher(numbers).find()) {
@@ -70,5 +68,9 @@ public class Operations {
 
     public void setResult(int result) {
         this.result = result;
+    }
+
+    public int getResult() {
+        return result;
     }
 }
