@@ -4,6 +4,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -15,20 +17,23 @@ public class Operations {
     }
 
     private String getDelimiter(String numbers) {
+        StringBuilder delimiter = new StringBuilder();
         Pattern delimiterPattern = Pattern.compile("(\\[.*?\\])");
         Matcher matcher = delimiterPattern.matcher(numbers);
-        if (matcher.find()){
-            return matcher.group(1);
-        }else {
-            return String.valueOf(numbers.charAt(2));
+        while (matcher.find()) {
+            delimiter.append("|").append(matcher.group(1));
         }
+        if (delimiter.length() == 0) {
+            return delimiter.append("|").append(String.valueOf(numbers.charAt(2))).toString();
+        }
+        return delimiter.toString();
     }
 
 
     public int Add(String numbers) {
         Pattern badNumbersPattern = Pattern.compile(",\\\\");
         Pattern optionalDelimiterPattern = Pattern.compile("//.*\\\\n");
-        String[] splitNumbers;
+        String[] splitNumbers = new String[0];
         StringBuilder neativeNumbers = new StringBuilder();
 
         if (badNumbersPattern.matcher(numbers).find()) {
@@ -36,8 +41,7 @@ public class Operations {
         } else {
 
             if (optionalDelimiterPattern.matcher(numbers).find()) {
-                System.out.println("tutaj"+getDelimiter(numbers));
-                splitNumbers = numbers.split("\\\\n|" + getDelimiter(numbers));
+                splitNumbers = numbers.split("\\\\n" + getDelimiter(numbers));
             } else {
                 splitNumbers = numbers.split("\\\\n|,");
             }
