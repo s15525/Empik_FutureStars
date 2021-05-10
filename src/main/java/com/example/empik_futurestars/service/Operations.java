@@ -15,29 +15,28 @@ public class Operations {
     }
 
     private String getDelimiter(String numbers) {
-        StringBuilder delimiter = new StringBuilder();
+        StringBuilder delimiters = new StringBuilder();
         Pattern delimiterPattern = Pattern.compile("(\\[.*?\\])");
         Matcher matcher = delimiterPattern.matcher(numbers);
         while (matcher.find()) {
-            delimiter.append("|").append(matcher.group(1));
+            delimiters.append("|").append(matcher.group(1));
         }
-        if (delimiter.length() == 0) {
-            return delimiter.append("|").append(numbers.charAt(2)).toString();
+        if (delimiters.length() == 0) {
+            return delimiters.append("|").append(numbers.charAt(2)).toString();
         }
-        return delimiter.toString();
+        return delimiters.toString();
     }
 
 
     public int Add(String numbers) {
-        Pattern badNumbersPattern = Pattern.compile(",\\\\");
+        Pattern badExpresionPattern = Pattern.compile(",\\\\");
         Pattern optionalDelimiterPattern = Pattern.compile("//.*\\\\n");
         String[] splitNumbers;
         StringBuilder neativeNumbers = new StringBuilder();
 
-        if (badNumbersPattern.matcher(numbers).find()) {
+        if (badExpresionPattern.matcher(numbers).find()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Bad char before new line expresion!");
         } else {
-
             if (optionalDelimiterPattern.matcher(numbers).find()) {
                 splitNumbers = numbers.split("\\\\n" + getDelimiter(numbers));
             } else {
@@ -68,9 +67,5 @@ public class Operations {
 
     public void setResult(int result) {
         this.result = result;
-    }
-
-    public int getResult() {
-        return result;
     }
 }
