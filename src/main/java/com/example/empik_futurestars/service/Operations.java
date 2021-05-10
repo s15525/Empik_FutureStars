@@ -41,6 +41,9 @@ public class Operations {
                     if (temp < 0) {
                         neativeNumbers.append(" ").append(temp);
                     }
+                    if (result + temp > 1000) {
+                        return result;
+                    }
                     result += temp;
                 } catch (NumberFormatException ignore) {
                 }
