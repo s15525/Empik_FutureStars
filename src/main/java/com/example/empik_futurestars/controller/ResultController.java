@@ -2,6 +2,7 @@ package com.example.empik_futurestars.controller;
 import com.example.empik_futurestars.service.Operations;
 import com.example.empik_futurestars.service.Result;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;

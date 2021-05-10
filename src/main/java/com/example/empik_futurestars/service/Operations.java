@@ -13,22 +13,43 @@ public class Operations {
     public Operations() {
     }
 
-    public int Add(String numbers) {
-        Pattern pattern = Pattern.compile(",\\\\");
+    private char getDelimiter(String numbers) {
+        return numbers.charAt(2);
+    }
 
-        if (pattern.matcher(numbers).find()) {
+
+    public int Add(String numbers) {
+        Pattern badNumbersPattern = Pattern.compile(",\\\\");
+        Pattern optionalDelimiterPattern = Pattern.compile("//.\\\\n");
+        String[] splitNumbers;
+        StringBuilder neativeNumbers = new StringBuilder();
+
+        if (badNumbersPattern.matcher(numbers).find()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Bad char before new line expresion!");
         } else {
-            String[] splitNumbers = numbers.split("\\\\n|,");
 
+            if (optionalDelimiterPattern.matcher(numbers).find()) {
+                char delimiter = getDelimiter(numbers);
+                splitNumbers = numbers.split("\\\\n|" + delimiter);
+            } else {
+                splitNumbers = numbers.split("\\\\n|,");
+            }
             for (String number :
                     splitNumbers) {
                 try {
-                    result += Integer.parseInt(number);
-                }catch(NumberFormatException ignored){
-
+                    int temp = Integer.parseInt(number);
+                    if (temp < 0) {
+                        neativeNumbers.append(" ").append(temp);
+                    }
+                    result += temp;
+                } catch (NumberFormatException ignore) {
                 }
             }
+
+            if (neativeNumbers.length() > 0) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Negatives not allowed" + neativeNumbers);
+            }
+
             return result;
         }
     }
